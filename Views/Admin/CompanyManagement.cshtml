@@ -1,0 +1,218 @@
+﻿@model Blanca_eManagement.Models.CompanyManagementViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Company Management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 bg-light sidebar p-0 vh-100 position-fixed">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link text-dark" asp-controller="Admin" asp-action="Index">
+                                Back to Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 offset-md-2" style="margin-top: 10px;">
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <div class="card h-100 p-3" style="width: 500px;">
+                            <h5>Company Info</h5>
+                            <p><strong>Name:</strong> @Model.CompanyInfo.CompanyName</p>
+                            <p><strong>Fiscal Code:</strong> @Model.CompanyInfo.FiscalCode</p>
+                            <p><strong>Trade Register Number:</strong> @Model.CompanyInfo.TradeRegisterNumber</p>
+                            <p><strong>Address:</strong> @Model.CompanyInfo.Address</p>
+                            <p><strong>Bank:</strong> @Model.CompanyInfo.Bank</p>
+                            <p><strong>Bank Account:</strong> @Model.CompanyInfo.BankAccount</p>
+                            <p><strong>Legal Representative:</strong> @Model.CompanyInfo.LegalRepresentative</p>
+                            <p><strong>VAT Payer:</strong> @(Model.CompanyInfo.IsVATPayer ? "Yes" : "No")</p>
+                            <p><strong>VAT Percentage:</strong> @Model.CompanyInfo.VATPercentage%</p>
+
+                            <div class="d-flex">
+                                <form asp-action="EditCompany" method="post" class="me-2">
+                                    <button type="submit" class="btn btn-secondary">Edit</button>
+                                </form>
+                                <form asp-action="DeleteCompany" method="post" class="me-2">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this information?');">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.CompanyInfo.IsEditMode)
+                    {
+                        <div class="col-md-6">
+                            <div class="card h-100 p-4" style="width: 600px;">
+                                <form asp-action="SaveCompany" method="post" class="needs-validation" novalidate>
+                                    <div class="row mb-3">
+                                        <label for="CompanyName" class="col-sm-3 col-form-label">Company Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="CompanyName" name="CompanyName" value="@Model.CompanyInfo.CompanyName" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="FiscalCode" class="col-sm-3 col-form-label">Fiscal Code</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="FiscalCode" name="FiscalCode" value="@Model.CompanyInfo.FiscalCode" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="TradeRegisterNumber" class="col-sm-3 col-form-label">Trade Register Number</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="TradeRegisterNumber" name="TradeRegisterNumber" value="@Model.CompanyInfo.TradeRegisterNumber" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="Address" class="col-sm-3 col-form-label">Address</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="Address" name="Address" value="@Model.CompanyInfo.Address" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="Bank" class="col-sm-3 col-form-label">Bank</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="Bank" name="Bank" value="@Model.CompanyInfo.Bank" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="BankAccount" class="col-sm-3 col-form-label">Bank Account</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="BankAccount" name="BankAccount" value="@Model.CompanyInfo.BankAccount" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="LegalRepresentative" class="col-sm-3 col-form-label">Legal Representative</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="LegalRepresentative" name="LegalRepresentative" value="@Model.CompanyInfo.LegalRepresentative" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-3 col-form-label">VAT Payer</label>
+                                        <div class="col-sm-9">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="IsVATPayer" id="IsVATPayerYes" value="true" @(Model.CompanyInfo.IsVATPayer ? "checked" : "")>
+                                                <label class="form-check-label" for="IsVATPayerYes">Yes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="IsVATPayer" id="IsVATPayerNo" value="false" @(!Model.CompanyInfo.IsVATPayer ? "checked" : "")>
+                                                <label class="form-check-label" for="IsVATPayerNo">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="VATPercentage" class="col-sm-3 col-form-label">VAT Percentage</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" id="VATPercentage" name="VATPercentage" value="@Model.CompanyInfo.VATPercentage" min="0" step="0.01" required @(Model.CompanyInfo.IsVATPayer ? "" : "disabled")>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="row g-4 mt-5">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>VAT Categories</h5>
+                            </div>
+                            <div class="card-body">
+                                <form asp-action="AddVATCategory" method="post">
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="Name" class="form-label">Category Name</label>
+                                            <input type="text" class="form-control" id="Name" name="Name" required />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="Details" class="form-label">Details</label>
+                                            <input type="text" class="form-control" id="Details" name="Details" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="VATPercentage" class="form-label">VAT Percentage</label>
+                                            <input type="number" class="form-control" id="VATPercentage" name="VATPercentage" step="0.01" required />
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Add New Category</button>
+                                </form>
+
+                                <hr />
+
+                                <h6>Existing Categories</h6>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Details</th>
+                                            <th>VAT Percentage</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var category in Model.VATCategories)
+                                        {
+                                            <tr>
+                                                <td>@category.Name</td>
+                                                <td>@category.Details</td>
+                                                <td>@category.VATPercentage%</td>
+                                                <td>
+                                                    <form asp-action="DeleteVATCategory" method="post" class="d-inline">
+                                                        <input type="hidden" name="id" value="@category.Id" />
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    }
+
+    <style>
+        #sidebar {
+            left: 0;
+        }
+
+        .sidebar-link {
+            display: block;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px 20px;
+            margin: 3px auto;
+            width: 75%;
+            background-color: #13063f;
+            color: white !important;
+        }
+
+            .sidebar-link:hover {
+                background-color: #2f5aa1;
+                color: white !important;
+                text-decoration: none;
+            }
+    </style>
+</body>
+</html>

@@ -1,0 +1,215 @@
+﻿@model IEnumerable<ProductModel>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Recipes Management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 bg-light sidebar p-0 vh-100 position-fixed">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link text-dark" asp-controller="Admin" asp-action="Index">
+                                Back to Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 offset-md-3 offset-lg-2">
+                <h1 class="mt-4">Recipes Management</h1>
+
+                <div class="table-responsive mt-4">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var product in Model)
+                                {
+                                    <tr>
+                                        <td>@product.Name</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addRecipeModal"
+                                                    onclick="openAddRecipeModal('@product.Id', '@product.Name')">
+                                                Add Recipe
+                                            </button>
+
+                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editRecipeModal"
+                                                    onclick="openEditRecipeModal('@product.Id', '@product.Name')">
+                                                Edit Recipe
+                                            </button>
+
+                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewRecipeModal"
+                                                    onclick="openViewRecipeModal('@product.Id', '@product.Name')">
+                                                View Recipe
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="2" class="text-center">No products available.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (ViewBag.TotalPages > 1)
+                {
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-action="RecipeManagement" asp-route-pageNumber="@i">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+
+            </main>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted bg-light mt-4">
+        <div class="container">
+            &copy; 2024 - Blanca eManagement. All Rights Reserved.
+        </div>
+    </footer>
+
+    <div class="modal fade" id="addRecipeModal" tabindex="-1" aria-labelledby="addRecipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRecipeModalLabel">Add Recipe for <span id="addRecipeProductName"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form asp-controller="Recipes" asp-action="AddRecipe" method="post">
+                        <input type="hidden" id="addRecipeProductId" name="ProductId" />
+                        <div class="mb-3">
+                            <label for="addRecipeContent" class="form-label">Recipe</label>
+                            <textarea class="form-control" id="addRecipeContent" name="Content" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Recipe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editRecipeModal" tabindex="-1" aria-labelledby="editRecipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRecipeModalLabel">Edit Recipe for <span id="editRecipeProductName"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form asp-controller="Recipes" asp-action="EditRecipe" method="post">
+                        <input type="hidden" id="editRecipeProductId" name="ProductId" />
+                        <div class="mb-3">
+                            <label for="editRecipeContent" class="form-label">Recipe</label>
+                            <textarea class="form-control" id="editRecipeContent" name="Content" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="viewRecipeModal" tabindex="-1" aria-labelledby="viewRecipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewRecipeModalLabel">View Recipe for <span id="viewRecipeProductName"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="viewRecipeContent">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openAddRecipeModal(productId, productName) {
+            document.getElementById('addRecipeProductId').value = productId;
+            document.getElementById('addRecipeProductName').textContent = productName;
+        }
+
+        function openEditRecipeModal(productId, productName) {
+            document.getElementById('editRecipeProductId').value = productId;
+            document.getElementById('editRecipeProductName').textContent = productName;
+
+            fetch(`/Recipes/GetRecipe?productId=${productId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.content) {
+                        document.getElementById('editRecipeContent').value = data.content;
+                    } else {
+                        document.getElementById('editRecipeContent').value = '';
+                    }
+                })
+                .catch(error => console.error('Error fetching recipe:', error));
+        }
+
+        function openViewRecipeModal(productId, productName) {
+            document.getElementById('viewRecipeProductName').textContent = productName;
+
+            fetch(`/Recipes/GetRecipe?productId=${productId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.content) {
+                        document.getElementById('viewRecipeContent').textContent = data.content;
+                    } else {
+                        document.getElementById('viewRecipeContent').textContent = 'No recipe available.';
+                    }
+                })
+                .catch(error => console.error('Error fetching recipe:', error));
+        }
+    </script>
+
+    <style>
+        #sidebar {
+            left: 0;
+        }
+
+        .sidebar-link {
+            display: block;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px 20px;
+            margin: 3px auto;
+            width: 75%;
+            background-color: #13063f;
+            color: white !important;
+        }
+
+            .sidebar-link:hover {
+                background-color: #2f5aa1;
+                color: white !important;
+                text-decoration: none;
+            }
+    </style>
+</body>
+</html>

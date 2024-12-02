@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar p-0 vh-100 position-fixed">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link btn sidebar-link text-white" asp-controller="Admin" asp-action="CompanyManagement">
+                            Company Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn sidebar-link text-white" asp-controller="Admin" asp-action="UsersManagement">
+                            Users Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn sidebar-link text-white" asp-controller="Products" asp-action="ProductManagement">
+                            Products Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn sidebar-link text-white" asp-controller="Recipes" asp-action="RecipeManagement">
+                            Recipe Management
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-9 ms-auto col-lg-10 px-md-4 offset-md-3 offset-lg-2" style="margin-top: 56px;">
+            <h1 class="mt-4">Admin Dashboard</h1>
+            <p>Welcome to the Admin Dashboard. Use the sidebar to manage users and products.</p>
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+}
+
+<style>
+  
+    #sidebar {
+        left: 0;
+    }
+
+    .sidebar-link {
+        display: block;
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 20px;
+        margin: 3px auto;
+        width: 75%;
+        background-color: #13063f;
+        color: white !important;
+    }
+
+        .sidebar-link:hover {
+            background-color: #2f5aa1;
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .sidebar-link.active {
+            background-color: #13063f;
+        }
+</style>

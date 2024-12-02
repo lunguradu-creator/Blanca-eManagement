@@ -1,0 +1,117 @@
+﻿@model ProductModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Create Product</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 bg-light sidebar p-0 vh-100 position-fixed">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link text-dark" asp-controller="Products" asp-action="ProductManagement">
+                                Back to Product Management
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 offset-md-3 offset-lg-2">
+                <h2 class="mt-5">Create New Product</h2>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-controller="Products" asp-action="CreateProduct" method="post">
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="Name" name="Name" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Price" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="Price" name="Price" step="0.01" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="CategoryId" class="form-label">Category</label>
+                        <select class="form-select" id="CategoryId" name="CategoryId" required>
+                            <option value="">-- Select Category --</option>
+                            @if (ViewBag.Categories != null && ((List<CategoryModel>)ViewBag.Categories).Any())
+                            {
+                                @foreach (var category in (List<CategoryModel>)ViewBag.Categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="">No categories available</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Stock" class="form-label">Stock</label>
+                        <input type="number" class="form-control" id="Stock" name="Stock" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Product</button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted bg-light mt-4">
+        <div class="container">
+            &copy; 2024 - Blanca eManagement. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        #sidebar {
+            left: 0;
+        }
+
+        .sidebar-link {
+            display: block;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px 20px;
+            margin: 3px auto;
+            width: 75%;
+            background-color: #13063f;
+            color: white !important;
+        }
+
+            .sidebar-link:hover {
+                background-color: #2f5aa1;
+                color: white !important;
+                text-decoration: none;
+            }
+
+            .sidebar-link.active {
+                background-color: #13063f;
+            }
+    </style>
+</body>
+</html>

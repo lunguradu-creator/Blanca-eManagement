@@ -1,0 +1,18 @@
+﻿@model Blanca_eManagement.Models.AssignRoleViewModel
+
+<h2>Assign Role to @Model.UserName</h2>
+<form asp-action="AssignRole" method="post">
+    <input type="hidden" name="userId" value="@Model.UserId" />
+
+    <div class="mb-3">
+        <label for="role" class="form-label">Select Role</label>
+        <select id="role" name="role" class="form-select">
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role">@role</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Assign Role</button>
+</form>
